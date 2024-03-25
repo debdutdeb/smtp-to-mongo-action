@@ -1,0 +1,27 @@
+name: 'SMTP in github actions'
+description: 'Start an SMTP server and put emails in mongodb'
+
+inputs:
+  mongo-url:
+    description: 'MongoDB connection string'
+    required: true
+
+  log-file:
+    description: 'Where to store the server logs'
+    required: true
+
+  port:
+    description: 'SMTP port'
+    required: false
+
+  database-name:
+    description: 'Where to store emails in mongo'
+    required: false
+
+  collection-name:
+    description: 'Where to store emails in mongo (collection)'
+    required: false
+
+runs:
+  using: 'node16'
+  main: "dist"
