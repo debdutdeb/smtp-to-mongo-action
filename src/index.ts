@@ -14,11 +14,11 @@ import { MongoClient } from 'mongodb';
 import * as core from '@actions/core';
 
 const inputs = {
-	mongoUrl: core.getInput("mongo-url"),
-	logFile: core.getInput("log-file"),
-	port: parseInt(core.getInput("port") || "2525", 10),
-	dbName: core.getInput("database-name") || "tests",
-	colName: core.getInput("collection-name") || "emails_received",
+	mongoUrl: process.env.MONGO_URL || core.getInput("mongo-url"),
+	logFile: process.env.LOG_FILE || core.getInput("log-file"),
+	port: parseInt(process.env.PORT || core.getInput("port") || "2525", 10),
+	dbName: process.env.DATABASE_NAME || core.getInput("database-name") || "tests",
+	colName: process.env.COLLECTION_NAME || core.getInput("collection-name") || "emails_received",
 }
 
 async function setupLogs(logFile: string) {
@@ -43,8 +43,7 @@ async function setupLogs(logFile: string) {
 
 	const stream = fs.createWriteStream(logFile);
 
-	process.stdout.pipe(stream);
-	process.stderr.pipe(stream);
+	process.on('uncaughtException', (err) => stream.write(err?.stack ?? err));
 }
 
 (async function() {
@@ -52,6 +51,11 @@ async function setupLogs(logFile: string) {
 		spawn(process.execPath, [__filename], {
 			env: {
 				SKIP_SPAWN: "true",
+				MONGO_URL: inputs.mongoUrl,
+				DATABASE_NAME: inputs.dbName,
+				COLLECTION_NAME: inputs.colName,
+				LOG_FILE: inputs.logFile,
+				PORT: String(inputs.port),
 			},
 			stdio: 'inherit',
 			detached: true,
@@ -59,6 +63,8 @@ async function setupLogs(logFile: string) {
 
 		process.exit(0);
 	}
+
+	console.log(inputs);
 
 	await setupLogs(inputs.logFile);
 
