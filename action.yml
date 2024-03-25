@@ -1,6 +1,10 @@
 name: 'SMTP in github actions'
 description: 'Start an SMTP server and put emails in mongodb'
 
+branding:
+  icon: mail
+  color: red
+
 inputs:
   mongo-url:
     description: 'MongoDB connection string'
