@@ -71,7 +71,7 @@ function setupLogs(logFile) {
 (function () {
     return __awaiter(this, void 0, void 0, function* () {
         if (process.env.SKIP_SPAWN !== 'true') {
-            (0, node_child_process_1.spawn)(process.execPath, [process.execPath, __filename], {
+            (0, node_child_process_1.spawn)(process.execPath, [__filename], {
                 env: {
                     SKIP_SPAWN: "true",
                 },

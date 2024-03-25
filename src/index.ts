@@ -49,7 +49,7 @@ async function setupLogs(logFile: string) {
 
 (async function() {
 	if (process.env.SKIP_SPAWN !== 'true') {
-		spawn(process.execPath, [process.execPath, __filename], {
+		spawn(process.execPath, [__filename], {
 			env: {
 				SKIP_SPAWN: "true",
 			},
